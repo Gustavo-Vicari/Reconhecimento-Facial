@@ -1,0 +1,52 @@
+import gab.opencv.*;
+import processing.video.*;
+import java.awt.*;
+
+Capture cam;
+OpenCV opencv;
+
+void setup() {
+  size(353, 289); // tamanho da janela que abrir 
+  cam = new Capture(this, 352, 288, "Full HD Webcam", 30);
+  //DroidCam Source 3
+  opencv = new OpenCV(this, 352, 288);
+  opencv.loadCascade(OpenCV.CASCADE_FRONTALFACE);
+  fill(255, 0, 0); 
+  textFont(createFont("Aspex",24));
+  textAlign(DOWN);
+
+  cam.start();
+}
+
+void draw() {
+  scale(1);
+  opencv.loadImage(cam);
+
+  image(cam, 0, 0 );
+  stroke(0);
+  scale(1);
+  /*
+   line(0, 80, 320, 80);
+   line(0, 160, 320, 160);
+   line(107, 240, 107, 0);
+   line(213, 0, 213, 240);
+   */
+   
+  noFill();
+  stroke(0, 255, 0);
+  strokeWeight(3);
+  Rectangle[] faces = opencv.detect();
+  println(faces.length);
+  print("Nenhum Rosto Detectado // ");  
+  
+  for (int i = 0; i < faces.length; i++) {
+    println(faces[i].x + "," + faces[i].y);
+    rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+    print("Rosto Detectado // ");
+    text("hue hue BR!", 0, 0, width, height);
+  }
+}
+
+void captureEvent(Capture c) {
+  c.read();
+}
